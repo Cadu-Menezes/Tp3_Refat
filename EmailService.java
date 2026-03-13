@@ -1,5 +1,9 @@
 public class EmailService {
-    public static void sendEmail(String to, String message) {
+    public void sendEmail(String to, String message) {
         System.out.println("Enviando e-mail para " + to + ": " + message);
+    }
+
+    public void sendOrderConfirmation(String to) {
+        sendEmail(to, "Pedido recebido! Obrigado pela compra.");
     }
 }

@@ -8,12 +8,14 @@ public class Order {
     private String clientEmail;
     private final List<OrderItem> items;
     private double discountRate;
+    private final EmailService emailService;
 
     public Order(String clientName, String clientEmail, double discountRate) {
         this.clientName = clientName;
         this.clientEmail = clientEmail;
         this.discountRate = discountRate;
         this.items = new ArrayList<>();
+        this.emailService = new EmailService();
     }
 
     public void addItem(OrderItem item) {
@@ -49,6 +51,6 @@ public class Order {
     }
 
     public void sendEmail() {
-        EmailService.sendEmail(clientEmail, "Pedido recebido! Obrigado pela compra.");
+        emailService.sendOrderConfirmation(clientEmail);
     }
 }
