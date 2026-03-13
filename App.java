@@ -1,6 +1,6 @@
 
 // Rodar o projeto: 
-// java *.java
+// javac *.java
 // java App
 
 public class App {

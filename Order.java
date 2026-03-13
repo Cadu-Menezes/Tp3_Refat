@@ -9,6 +9,7 @@ public class Order {
     private final List<OrderItem> items;
     private double discountRate;
     private final EmailService emailService;
+    private final InvoicePrinter invoicePrinter;
 
     public Order(String clientName, String clientEmail, double discountRate) {
         this.clientName = clientName;
@@ -16,6 +17,7 @@ public class Order {
         this.discountRate = discountRate;
         this.items = new ArrayList<>();
         this.emailService = new EmailService();
+        this.invoicePrinter = new InvoicePrinter();
     }
 
     public void addItem(OrderItem item) {
@@ -38,16 +40,24 @@ public class Order {
         return Collections.unmodifiableList(items);
     }
 
-    public void printInvoice() {
-        double total = 0;
-        System.out.println("Cliente: " + clientName);
+    public double calculateSubtotal() {
+        double subtotal = 0;
         for (OrderItem item : items) {
-            System.out.println(item.getQuantity() + "x " + item.getProductName() + " - R$" + item.getUnitPrice());
-            total += item.getSubtotal();
+            subtotal += item.getSubtotal();
         }
-        System.out.println("Subtotal: R$" + total);
-        System.out.println("Desconto: R$" + DiscountPolicy.calculateDiscount(total, discountRate));
-        System.out.println("Total final: R$" + (total - DiscountPolicy.calculateDiscount(total, discountRate)));
+        return subtotal;
+    }
+
+    public double calculateDiscountAmount() {
+        return DiscountPolicy.calculateDiscount(calculateSubtotal(), discountRate);
+    }
+
+    public double calculateFinalTotal() {
+        return calculateSubtotal() - calculateDiscountAmount();
+    }
+
+    public void printInvoice() {
+        invoicePrinter.print(this);
     }
 
     public void sendEmail() {

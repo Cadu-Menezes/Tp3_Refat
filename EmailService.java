@@ -4,6 +4,10 @@ public class EmailService {
     }
 
     public void sendOrderConfirmation(String to) {
-        sendEmail(to, "Pedido recebido! Obrigado pela compra.");
+        sendEmail(to, buildOrderConfirmationMessage());
+    }
+
+    private String buildOrderConfirmationMessage() {
+        return "Pedido recebido! Obrigado pela compra.";
     }
 }
