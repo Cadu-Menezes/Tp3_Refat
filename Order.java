@@ -43,11 +43,16 @@ public class Order {
     }
 
     public double calculateDiscountAmount() {
-        return DiscountPolicy.calculateDiscount(calculateSubtotal(), discountRate);
+        return calculateDiscountForSubtotal(calculateSubtotal());
     }
 
     public double calculateFinalTotal() {
-        return calculateSubtotal() - calculateDiscountAmount();
+        double subtotal = calculateSubtotal();
+        return subtotal - calculateDiscountForSubtotal(subtotal);
+    }
+
+    private double calculateDiscountForSubtotal(double subtotal) {
+        return DiscountPolicy.calculateDiscount(subtotal, discountRate);
     }
 
     public void printInvoice() {
