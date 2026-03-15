@@ -4,16 +4,14 @@ import java.util.List;
 
 public class Order {
 
-    private String clientName;
-    private String clientEmail;
+    private final Client client;
     private final List<OrderItem> items;
     private double discountRate;
     private final EmailService emailService;
     private final InvoicePrinter invoicePrinter;
 
-    public Order(String clientName, String clientEmail, double discountRate) {
-        this.clientName = clientName;
-        this.clientEmail = clientEmail;
+    public Order(Client client, double discountRate) {
+        this.client = client;
         this.discountRate = discountRate;
         this.items = new ArrayList<>();
         this.emailService = new EmailService();
@@ -24,12 +22,8 @@ public class Order {
         items.add(item);
     }
 
-    public String getClientName() {
-        return clientName;
-    }
-
-    public String getClientEmail() {
-        return clientEmail;
+    public Client getClient() {
+        return client;
     }
 
     public double getDiscountRate() {
@@ -61,6 +55,6 @@ public class Order {
     }
 
     public void sendEmail() {
-        emailService.sendOrderConfirmation(clientEmail);
+        emailService.sendOrderConfirmation(client.getEmail());
     }
 }
