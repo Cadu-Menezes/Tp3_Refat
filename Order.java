@@ -1,17 +1,19 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Order {
 
     private final Client client;
     private final List<OrderItem> items;
-    private double discountRate;
+    private final double discountRate;
     private final EmailService emailService;
     private final InvoicePrinter invoicePrinter;
 
     public Order(Client client, double discountRate) {
-        this.client = client;
+        this.client = Objects.requireNonNull(client, "client nao pode ser nulo");
+        validateDiscountRate(discountRate);
         this.discountRate = discountRate;
         this.items = new ArrayList<>();
         this.emailService = new EmailService();
@@ -19,15 +21,11 @@ public class Order {
     }
 
     public void addItem(OrderItem item) {
-        items.add(item);
+        items.add(Objects.requireNonNull(item, "item nao pode ser nulo"));
     }
 
     public Client getClient() {
         return client;
-    }
-
-    public double getDiscountRate() {
-        return discountRate;
     }
 
     public List<OrderItem> getItems() {
@@ -53,6 +51,12 @@ public class Order {
 
     private double calculateDiscountForSubtotal(double subtotal) {
         return DiscountPolicy.calculateDiscount(subtotal, discountRate);
+    }
+
+    private void validateDiscountRate(double discountRate) {
+        if (discountRate < 0 || discountRate > 1) {
+            throw new IllegalArgumentException("discountRate deve estar entre 0 e 1");
+        }
     }
 
     public void printInvoice() {
